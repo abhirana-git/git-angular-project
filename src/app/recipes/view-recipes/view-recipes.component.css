@@ -1,0 +1,148 @@
+.recipe-details {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+  max-width: 600px;
+  margin: 100px auto 0; /* Added margin-top to push content below navbar */
+  font-family: Arial, sans-serif;
+}
+
+.recipe-image {
+  display: flex;
+  justify-content: center;
+}
+
+.recipe-image img {
+  width: 80%; /* Adjusted to make the image look more visually appealing */
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.recipe-image img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.recipe-title {
+  font-size: 1.5rem;
+  color: #333;
+  text-align: center;
+}
+
+.recipe-ingredients,
+.recipe-steps {
+  font-size: 1rem;
+  color: #555;
+}
+
+.recipe-steps ol {
+  padding-left: 20px;
+}
+
+.recipe-rating {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.star-rating {
+  display: flex;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.star-rating span {
+  color: #ccc;
+  transition: color 0.3s;
+}
+
+.star-rating span.selected {
+  color: gold;
+}
+
+.recipe-feedback textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
+  resize: none;
+}
+
+.feedback-actions button {
+  padding: 12px 24px;
+  font-size: 1rem;
+  color: white;
+  background-color: #28a745;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.feedback-actions button:hover {
+  background-color: #218838;
+}
+
+.all-feedback ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.all-feedback li {
+  background-color: #f9f9f9;
+  padding: 12px;
+  margin: 5px 0;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.feedback-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.user-info {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.rating-info {
+  font-size: 1rem;
+  color: #777;
+}
+
+.feedback-text p {
+  font-size: 0.95rem;
+  color: #555;
+  margin: 0;
+}
+
+@media (max-width: 600px) {
+  .recipe-details {
+    padding: 8px;
+    gap: 12px;
+  }
+
+  .recipe-title {
+    font-size: 1.25rem;
+  }
+
+  .star-rating {
+    font-size: 20px;
+  }
+
+  .feedback-actions button {
+    font-size: 0.9rem;
+  }
+
+  .feedback-item {
+    font-size: 0.9rem;
+  }
+}

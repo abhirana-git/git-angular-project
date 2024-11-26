@@ -1,0 +1,36 @@
+<div class="recipe-form">
+  <h2>Create a Delicious Recipe</h2>
+  <form (ngSubmit)="onSubmit()" [formGroup]="form">
+    <div class="form-group">
+      <label for="title">Recipe Title</label>
+      <input type="text" id="title" name="title" formControlName="title" required />
+    </div>
+
+    <div class="form-group" formArrayName="ingredients">
+      <label>Ingredients</label>
+      <div *ngFor="let ingredient of ingredients.controls; let i = index" class="input-row">
+        <input type="text" [formControlName]="i" placeholder="Enter ingredient" required />
+        <button *ngIf="i !== 0" type="button" class="btn btn-remove" (click)="removeIngredient(i)">Remove</button>
+      </div>
+      <button type="button" class="btn btn-add" (click)="addIngredient()">+ Add Ingredient</button>
+      <p *ngIf="!isIngrdntEntered" class="error">Ingredient cannot be left blank.</p>
+    </div>
+
+    <div class="form-group" formArrayName="steps">
+      <label>Steps</label>
+      <div *ngFor="let step of steps.controls; let i = index" class="input-row">
+        <input type="text" [formControlName]="i" placeholder="Enter step" required />
+        <button *ngIf="i !== 0" type="button" class="btn btn-remove" (click)="removeStep(i)">Remove</button>
+      </div>
+      <button type="button" class="btn btn-add" (click)="addStep()">+ Add Step</button>
+      <p *ngIf="!isStepsEntered" class="error">Step cannot be left blank.</p>
+    </div>
+
+    <div class="form-group">
+      <label for="image">Recipe Image</label>
+      <input type="file" id="image" name="image" formControlName="image" (change)="onFileChange($event)" required />
+    </div>
+
+    <button type="submit" class="btn btn-submit" [disabled]="form.invalid">Submit Your Recipe</button>
+  </form>
+</div>

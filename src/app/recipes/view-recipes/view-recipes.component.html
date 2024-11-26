@@ -1,0 +1,59 @@
+<div class="recipe-details">
+  <div class="recipe-image">
+    <img [src]="recipe()?.image" alt="{{ recipe()?.title }}" />
+  </div>
+
+  <h2 class="recipe-title">{{ recipe()?.title }}</h2>
+
+  <p class="recipe-ingredients">
+    <strong>Ingredients:</strong> {{ recipe()?.ingredients?.join(', ') }}
+  </p>
+
+  <div class="recipe-steps">
+    <strong>Steps:</strong>
+    <ol>
+      <li *ngFor="let step of recipe()?.steps">{{ step }}</li>
+    </ol>
+  </div>
+
+  <div class="recipe-rating">
+    <strong>Your Rating:</strong>
+    <div class="star-rating">
+      <span
+        *ngFor="let star of stars; let i = index"
+        (click)="selectRating(i + 1)"
+        [class.selected]="i < (newRating ?? 0)"
+      >
+        ★
+      </span>
+    </div>
+  </div>
+
+  <div class="recipe-feedback">
+    <strong>Your Feedback:</strong>
+    <textarea [(ngModel)]="newFeedback" rows="3" placeholder="Add your feedback here"></textarea>
+  </div>
+
+  <div class="feedback-actions">
+    <button (click)="saveFeedback()">Submit</button>
+  </div>
+
+  <div class="all-feedback">
+    <strong>All Feedback:</strong>
+    <ul>
+      <li *ngFor="let feedback of feedback(); let i = index;">
+        <div class="feedback-item">
+          <div class="user-info">
+            <strong>{{getFullname(feedback.userId??'')}}</strong>
+          </div>
+          <div class="rating-info">
+            <span>Rating: {{ feedback.rating }} ⭐</span>
+          </div>
+          <div class="feedback-text">
+            <p>{{ feedback.feedback }}</p>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>

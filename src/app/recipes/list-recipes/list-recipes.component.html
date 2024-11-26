@@ -1,0 +1,12 @@
+<div class="recipe-list">
+    <h1>Recipe List</h1>
+    
+    <div class="recipe-container">
+      <div class="recipe-item" *ngFor="let recipe of recipes() || [] ;let i = index" (click)="GetRecipeById(recipe.id)">
+        <img [src]="recipe.image" alt="{{ recipe.title }}"/>
+        <div class="recipe-name">
+          {{ recipe.title }}
+        </div>
+      </div>
+    </div>
+  </div>
