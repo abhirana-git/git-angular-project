@@ -54,6 +54,9 @@ get steps(){
     const stepsCtrl = new FormControl('', { validators: [Validators.required] })
     this.steps.push(stepsCtrl);
    }
+   else{
+    this.isStepsEntered=false;
+   }
   }
 
   removeStep(index: number) {

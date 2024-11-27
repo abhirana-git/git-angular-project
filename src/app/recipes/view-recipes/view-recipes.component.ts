@@ -6,7 +6,6 @@ import { Feedback } from '../../model/feedback.model';
 import { FeedbackService } from '../../service/feedback.service';
 import { AuthenticateService } from '../../service/authenticate.service';
 import { SignupService } from '../../service/signup.service';
-import { map } from 'rxjs';
 
 @Component({
   selector: 'app-view-recipes',
@@ -20,7 +19,7 @@ export class ViewRecipesComponent implements OnInit {
   feedback = signal<Feedback[]>([]);
   recipe = signal<Recipe | undefined>(undefined);
   stars: number[] = [1, 2, 3, 4, 5];
-  id:number=0;
+  id:string='';
   users: { fullname: string; userId: string }[] = []
   isFeedbackGiven:boolean=false;
 
@@ -33,7 +32,7 @@ export class ViewRecipesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.id = Number(this.route.snapshot.paramMap.get('id'));
+    this.id = this.route.snapshot.paramMap.get('id')??'';
     this.signupService.getAllUsers()
     .subscribe({
       next:(val) =>{
@@ -43,7 +42,7 @@ export class ViewRecipesComponent implements OnInit {
           );
         }
         else{
-          this.users=[{fullname:'',userId:''}]
+          this.users=[]
         }
       }
     })
@@ -63,7 +62,7 @@ export class ViewRecipesComponent implements OnInit {
     this.newRating = selectedRating;
   }
 
-  feedbacksForRecipeById(recipeId: number) {
+  feedbacksForRecipeById(recipeId: string) {
     this.feedbackService.getAll().subscribe({
       next: (val) => {
         const filteredFeedback: Feedback[] = val.filter(

@@ -1,12 +1,24 @@
 <div class="recipe-list">
-    <h1>Recipe List</h1>
+  <h1>Recipe List</h1>
+  
+  <div class="filters">
+    <!-- <select class="filter-ddl" [(ngModel)]="selectedRating">
+      <option value="" disabled selected>Select Rating</option>
+      <option *ngFor="let rating of ratings" [value]="rating">{{ rating }}</option>
+    </select> -->
     
-    <div class="recipe-container">
-      <div class="recipe-item" *ngFor="let recipe of recipes() || [] ;let i = index" (click)="GetRecipeById(recipe.id)">
-        <img [src]="recipe.image" alt="{{ recipe.title }}"/>
-        <div class="recipe-name">
-          {{ recipe.title }}
-        </div>
+    <select class="filter-ddl" [(ngModel)]="selectedIngredient" (change)="onIngredientChange()">
+      <option value="">All Dishes</option>
+      <option *ngFor="let ingredient of ingredients" [value]="ingredient">{{ ingredient }}</option>
+    </select>    
+  </div>
+  
+  <div class="recipe-container">
+    <div class="recipe-item" *ngFor="let recipe of filteredRecipesList() || [] ; let i = index" (click)="GetRecipeById(recipe.id)">
+      <img [src]="recipe.image" alt="{{ recipe.title }}"/>
+      <div class="recipe-name">
+        {{ recipe.title }}
       </div>
     </div>
   </div>
+</div>

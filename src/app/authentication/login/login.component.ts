@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit {
         if (user) {
           this.userDetails.set(user); 
           this.auth.login(user.id);
-          console.log('login component', user.id) 
+          console.log('login component', user.id); 
           this.loginForm.reset();
         } else {
           alert('Wrong email or password entered. Try Again!!');
