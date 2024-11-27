@@ -7,5 +7,5 @@ import { Component } from '@angular/core';
   styleUrl: './navbar.component.css'
 })
 export class NavbarComponent {
-  logoUrl = "/logo.jpg";
+  logoUrl = "https://zgbrjqmrzpxzmtybzwpc.supabase.co/storage/v1/object/public/images/images/logo.png";
 }

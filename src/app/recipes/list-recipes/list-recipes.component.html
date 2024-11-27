@@ -2,11 +2,6 @@
   <h1>Recipe List</h1>
   
   <div class="filters">
-    <!-- <select class="filter-ddl" [(ngModel)]="selectedRating">
-      <option value="" disabled selected>Select Rating</option>
-      <option *ngFor="let rating of ratings" [value]="rating">{{ rating }}</option>
-    </select> -->
-    
     <select class="filter-ddl" [(ngModel)]="selectedIngredient" (change)="onIngredientChange()">
       <option value="">All Dishes</option>
       <option *ngFor="let ingredient of ingredients" [value]="ingredient">{{ ingredient }}</option>

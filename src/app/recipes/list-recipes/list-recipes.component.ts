@@ -29,8 +29,8 @@ export class ListRecipesComponent implements OnInit {
   onSelectView() {
     this.httpservice.getAll().subscribe({
       next: (val) => {
-        this.recipes.set(val); // Set original recipes
-        this.filteredRecipesList.set(val); // Initialize filtered list
+        this.recipes.set(val); 
+        this.filteredRecipesList.set(val); 
         this.extractIngredients(val);
         console.log('Transformed recipes:', this.recipes());
       },
@@ -40,7 +40,7 @@ export class ListRecipesComponent implements OnInit {
 
   extractIngredients(recipes: Recipe[]) {
     const allIngredients = recipes.flatMap((recipe) => recipe.ingredients);
-    this.ingredients = [...new Set(allIngredients)]; // Remove duplicates using Set
+    this.ingredients = [...new Set(allIngredients)]; 
   }
 
   GetRecipeById(recipeId: number | string) {

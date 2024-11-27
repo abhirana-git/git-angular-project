@@ -42,4 +42,8 @@
 .nav-links li a.active-link {
   color: #ff5722;
 }
-
+.logo-container {
+  display: flex;
+  align-items: center;  
+  gap: 10px; 
+}
