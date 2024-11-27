@@ -17,15 +17,10 @@ export class SupabaseService {
 
   async uploadImage(file: File): Promise<string | null> {
     try {
-      const filePath = `images/${file.name}`; // Define the storage path
+      const filePath = `images/${file.name}`; 
       const { data, error } = await this.supabase.storage
-        .from('images') // Bucket name
+        .from('images') 
         .upload(filePath, file);
-
-      // if (error) {
-      //   console.error('Error uploading image:', error);
-      //   return null;
-      // }
 
       const { data: publicURL } = this.supabase.storage
         .from('images')

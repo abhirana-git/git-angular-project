@@ -43,15 +43,3 @@
   color: #ff5722;
 }
 
-.search-container {
-  display: flex;
-  align-items: center;
-}
-
-.search-bar {
-  padding: 0.8rem;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 1rem;
-  width: 250px; 
-}

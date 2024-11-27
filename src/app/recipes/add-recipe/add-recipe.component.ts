@@ -7,7 +7,7 @@ import {
 } from '@angular/forms';
 import { RecipeService } from '../../service/recipe.service';
 import { Recipe } from '../../model/recipe.model';
-import { SupabaseService } from '../../service/supabase-service.service';
+import { SupabaseService } from '../../service/supabase.service';
 
 @Component({
   selector: 'app-add-recipe',
@@ -76,14 +76,18 @@ get steps(){
       const recipe: Recipe = this.form.value as Recipe;
       this.httpService.add(recipe).subscribe({
         next: (response: any) => {
-          console.log('Recipe added successfully:', response.value);
+          console.log('Recipe added successfully');
+          this.form.reset()
         },
         error: (err: any) => {
+          alert('some error occurred while saving.');
           console.error('Error adding recipe:', err);
         },
       });
     }
-    this.form.reset()
+    else {
+      console.log('Form is invalid or no image selected');
+    }
   }
 
   async onFileChange(event: Event) {
@@ -94,7 +98,7 @@ get steps(){
       console.log('outside if add function image url', imageUrl);
       if (imageUrl) {
         console.log('add function image url', this.uploadedImageUrl);
-        this.uploadedImageUrl = imageUrl; // Store the public URL
+        this.uploadedImageUrl = imageUrl; 
         console.log('add function image url', this.uploadedImageUrl);
       }
     }
