@@ -7,6 +7,7 @@ import {
 } from '@angular/forms';
 import { RecipeService } from '../../service/recipe.service';
 import { Recipe } from '../../model/recipe.model';
+import { SupabaseService } from '../../service/supabase-service.service';
 
 @Component({
   selector: 'app-add-recipe',
@@ -15,10 +16,12 @@ import { Recipe } from '../../model/recipe.model';
   styleUrl: './add-recipe.component.css',
 })
 export class AddRecipeComponent {
-  base64Image: string | null = null;
   isStepsEntered:boolean=true;
   isIngrdntEntered:boolean=true;
-  constructor(private httpService: RecipeService) {}
+  uploadedImageUrl:string|null=null;
+  constructor(private httpService: RecipeService,
+    private supabaseService:SupabaseService
+  ) {}
 
   form = new FormGroup({
     title: new FormControl('', { validators: [Validators.required] }),
@@ -69,7 +72,7 @@ get steps(){
 
   onSubmit() {
     if (this.form.valid) {
-      this.form.value.image = this.base64Image;
+      this.form.value.image = this.uploadedImageUrl;
       const recipe: Recipe = this.form.value as Recipe;
       this.httpService.add(recipe).subscribe({
         next: (response: any) => {
@@ -80,20 +83,20 @@ get steps(){
         },
       });
     }
+    this.form.reset()
   }
 
-  onFileChange(event: Event) {
+  async onFileChange(event: Event) {
     const input = event.target as HTMLInputElement;
-    if (input?.files?.[0]) {
+    if (input.files && input.files.length > 0) {
       const file = input.files[0];
-      const reader = new FileReader();
-
-      reader.onload = () => {
-        this.base64Image = reader.result as string;
-        console.log('Base64 Image:', this.base64Image);
-      };
-
-      reader.readAsDataURL(file);
-  }
+      const imageUrl = await this.supabaseService.uploadImage(file);
+      console.log('outside if add function image url', imageUrl);
+      if (imageUrl) {
+        console.log('add function image url', this.uploadedImageUrl);
+        this.uploadedImageUrl = imageUrl; // Store the public URL
+        console.log('add function image url', this.uploadedImageUrl);
+      }
+    }
 }
 }
