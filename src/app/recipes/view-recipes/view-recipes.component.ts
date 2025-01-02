@@ -5,7 +5,7 @@ import { RecipeService } from '../../service/recipe.service';
 import { Feedback } from '../../model/feedback.model';
 import { FeedbackService } from '../../service/feedback.service';
 import { AuthenticateService } from '../../service/authenticate.service';
-import { SignupService } from '../../service/signup.service';
+import { UrlSetupConfigService } from '../../service/url-setup-config.service';
 
 @Component({
   selector: 'app-view-recipes',
@@ -28,34 +28,23 @@ export class ViewRecipesComponent implements OnInit {
     private recipeService: RecipeService,
     private feedbackService: FeedbackService,
     private authService: AuthenticateService,
-    private signupService: SignupService
+    private apiurlsetup: UrlSetupConfigService
   ) {}
 
   ngOnInit(): void {
-    this.id = this.route.snapshot.paramMap.get('id')??'';
-    this.signupService.getAllUsers()
-    .subscribe({
-      next:(val) =>{
-        if(val){
-          val.forEach((user) =>
-            this.users.push({ fullname: user.fullname, userId: user.id })
-          );
-        }
-        else{
-          this.users=[]
-        }
-      }
-    })
-    this.feedbacksForRecipeById(this.id);
-    this.recipeService.getById(this.id).subscribe({
+    this.id= this.route.snapshot.paramMap.get('id')??'';
+    this.apiurlsetup.setApiUrl(`Recipe/GetbyId`);
+    
+    this.recipeService.getRecipeById(parseInt(this.id)).subscribe({
       next: (val) => {
         this.recipe.set(val);
       },
     });
+    this.feedbacksForRecipeById(this.id);
   }
 
   getFullname(userId:string){
-    return this.users.find(user => user.userId === userId)?.fullname;
+    return this.feedback().find(user => user.userId === userId)?.name;
   }
 
   selectRating(selectedRating: number): void {
@@ -63,8 +52,10 @@ export class ViewRecipesComponent implements OnInit {
   }
 
   feedbacksForRecipeById(recipeId: string) {
-    this.feedbackService.getAll().subscribe({
+    this.apiurlsetup.setApiUrl(`Feedback/GetByRecipeId/${recipeId}`);
+    this.feedbackService.getAllFeedback().subscribe({
       next: (val) => {
+        console.log('let see inside get all api data', val);
         const filteredFeedback: Feedback[] = val.filter(
           (feedback) => feedback.recipeId == recipeId
         );
@@ -79,6 +70,7 @@ export class ViewRecipesComponent implements OnInit {
       userId: this.authService.userId??'',
       rating: this.newRating ?? '',
       feedback: this.newFeedback ?? '',
+      name:''
     };
   }
 
@@ -87,18 +79,22 @@ export class ViewRecipesComponent implements OnInit {
       alert('Login to give rating and feedback.')
       return;
     }
-    if(this.feedback()){
-      const loggedInId = this.authService.userId??'';
-      const isRatingAlreadyGiven = this.feedback().find(x => x.userId == loggedInId);
-      if(loggedInId != null && loggedInId != '' && isRatingAlreadyGiven){
-        this.newFeedback='';
-        this.newRating=0;
-        return alert('You have already provided the rating and comment.');
+    this.apiurlsetup.setApiUrl('Feedback/Add');
+    this.feedbackService.addFeedback(this.newFeedbackForAdd()).subscribe({
+        next: (val:any) => {
+          if (val._statusCode === 200) {
+            this.feedback.set(val);
+            alert('Feedback added successfully!');}
+            else if (val._statusCode === 400) {
+            alert('Already given feedback!');
+          }
+        },
+        error: (err) => {
+          alert('An unexpected error occurred. Please try again later.');
         }
-    }
-    this.feedbackService.addFeedback(this.newFeedbackForAdd());
+      });
     this.newFeedback='';
     this.newRating=0;
-    this.feedbacksForRecipeById(this.id);
+    this.feedbacksForRecipeById(this.id)
   }
 }

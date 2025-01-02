@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   FormArray,
   FormControl,
@@ -8,6 +8,7 @@ import {
 import { RecipeService } from '../../service/recipe.service';
 import { Recipe } from '../../model/recipe.model';
 import { SupabaseService } from '../../service/supabase.service';
+import { UrlSetupConfigService } from '../../service/url-setup-config.service';
 
 @Component({
   selector: 'app-add-recipe',
@@ -15,13 +16,17 @@ import { SupabaseService } from '../../service/supabase.service';
   templateUrl: './add-recipe.component.html',
   styleUrl: './add-recipe.component.css',
 })
-export class AddRecipeComponent {
+export class AddRecipeComponent implements OnInit {
   isStepsEntered:boolean=true;
   isIngrdntEntered:boolean=true;
   uploadedImageUrl:string|null=null;
   constructor(private httpService: RecipeService,
-    private supabaseService:SupabaseService
+    private supabaseService:SupabaseService,
+    private apiurlsetup:UrlSetupConfigService
   ) {}
+  ngOnInit(): void {
+    this.apiurlsetup.setApiUrl('Recipe/Add');
+  }
 
   form = new FormGroup({
     title: new FormControl('', { validators: [Validators.required] }),
@@ -74,19 +79,18 @@ get steps(){
     if (this.form.valid) {
       this.form.value.image = this.uploadedImageUrl;
       const recipe: Recipe = this.form.value as Recipe;
+      this.apiurlsetup.setApiUrl('Recipe/Add');
       this.httpService.add(recipe).subscribe({
         next: (response: any) => {
-          console.log('Recipe added successfully');
           this.form.reset()
         },
         error: (err: any) => {
           alert('some error occurred while saving.');
-          console.error('Error adding recipe:', err);
         },
       });
     }
     else {
-      console.log('Form is invalid or no image selected');
+      alert('Form is invalid or no image selected');
     }
   }
 
@@ -95,11 +99,8 @@ get steps(){
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
       const imageUrl = await this.supabaseService.uploadImage(file);
-      console.log('outside if add function image url', imageUrl);
       if (imageUrl) {
-        console.log('add function image url', this.uploadedImageUrl);
         this.uploadedImageUrl = imageUrl; 
-        console.log('add function image url', this.uploadedImageUrl);
       }
     }
 }

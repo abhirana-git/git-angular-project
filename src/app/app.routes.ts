@@ -5,19 +5,23 @@ import { ViewRecipesComponent } from './recipes/view-recipes/view-recipes.compon
 import { LoginComponent } from './authentication/login/login.component';
 import { HomeComponent } from './home/home.component';
 import { SignupComponent } from './authentication/signup/signup.component';
+import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
     {
         path:'recipe/list',
-        component: ListRecipesComponent
+        component: ListRecipesComponent,
+        canActivate:[AuthGuard]
       },
       {
         path:'recipe/add',
-        component: AddRecipeComponent
+        component: AddRecipeComponent,
+        canActivate:[AuthGuard]
       },
       {
         path:'recipe/view/:id',
-        component: ViewRecipesComponent
+        component: ViewRecipesComponent,
+        canActivate:[AuthGuard]
       },
       {
         path:'recipe/login',

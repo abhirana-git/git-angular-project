@@ -2,6 +2,8 @@ import { Component, OnInit, signal } from '@angular/core';
 import { AuthenticateService } from '../../service/authenticate.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { UserModel } from '../../model/user.model';
+import { UrlSetupConfigService } from '../../service/url-setup-config.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -11,11 +13,14 @@ import { UserModel } from '../../model/user.model';
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private auth:AuthenticateService) {
+  constructor(private auth:AuthenticateService, private apiurlsetup:UrlSetupConfigService,
+    private router:Router
+  ) {
   }
   userDetails = signal<UserModel|undefined>(undefined);
   ngOnInit(): void {
 
+      this.apiurlsetup.setApiUrl('Auth/Login');
   }
 
   loginForm=new FormGroup({
@@ -32,20 +37,24 @@ export class LoginComponent implements OnInit {
     const userModel: UserModel = this.loginForm.value as UserModel;
   
     this.auth.getUserDetails(userModel).subscribe({
-      next: (user) => {
-        if (user) {
-          this.userDetails.set(user); 
-          this.auth.login(user.id);
-          console.log('login component', user.id); 
+      next: (response: any) => {
+        console.log('API Response:', response);
+        if (response && response.token) {
+          localStorage.setItem('authToken', response.token);
+          this.auth.login();
+          this.router.navigate(['recipe/list']);
           this.loginForm.reset();
         } else {
-          alert('Wrong email or password entered. Try Again!!');
+          alert('Unexpected response from the server.');
         }
       },
       error: (err) => {
-        console.error('Error fetching user details:', err);
-        alert('An error occurred. Please try again later.');
-      }
+        if (err.status === 400 || err.status === 401) {
+          alert(err.error.Message || 'Invalid email or password.');
+        } else {
+          alert('An error occurred. Please try again later.');
+        }
+      },
     });
-  }
+  }  
 }  

@@ -2,6 +2,7 @@ import { Component, OnInit, signal } from '@angular/core';
 import { Recipe } from '../../model/recipe.model';
 import { RecipeService } from '../../service/recipe.service';
 import { Router } from '@angular/router';
+import { UrlSetupConfigService } from '../../service/url-setup-config.service';
 
 @Component({
   selector: 'app-list-recipes',
@@ -19,10 +20,12 @@ export class ListRecipesComponent implements OnInit {
 
   constructor(
     private httpservice: RecipeService,
-    private router: Router
+    private router: Router,
+    private apiurlsetup:UrlSetupConfigService
   ) {}
 
   ngOnInit(): void {
+    this.apiurlsetup.setApiUrl('Recipe/GetAll');
     this.onSelectView();
   }
 
@@ -32,7 +35,6 @@ export class ListRecipesComponent implements OnInit {
         this.recipes.set(val); 
         this.filteredRecipesList.set(val); 
         this.extractIngredients(val);
-        console.log('Transformed recipes:', this.recipes());
       },
       error: (err) => console.error('Error fetching recipes:', err),
     });
@@ -44,7 +46,6 @@ export class ListRecipesComponent implements OnInit {
   }
 
   GetRecipeById(recipeId: number | string) {
-    console.log('recipe id', recipeId);
     this.router.navigate(['recipe/view', recipeId]);
   }
 

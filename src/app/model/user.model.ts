@@ -6,10 +6,9 @@ export interface UserModel
     rememberme:boolean
 }
 
-
 export interface SignupModel
 {
-    id:string,
+    id:string,                                                  
     firstname:string,
     lastname:string,
     fullname:string,
